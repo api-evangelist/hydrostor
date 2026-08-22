@@ -1,0 +1,24 @@
+generated: '2026-08-22'
+method: searched
+source: https://hydrostor.ca/
+plan_count: 0
+note: >-
+  Hydrostor sells grid-scale energy storage capacity to utilities, system operators and offtakers under
+  negotiated long-term contracts. There is no pricing page, no plans page, no API signup and no self-serve
+  checkout anywhere on hydrostor.ca — the page sitemap lists 22 pages and none of them is a pricing, plans
+  or developer signup page. The content API profiled in this repo is incidental WordPress infrastructure
+  that is free and unmetered because nobody is selling it. plan_count is 0 as a recorded fact, not an
+  unchecked field.
+plans: []
+commercial_model: negotiated offtake / power purchase agreements (energy infrastructure)
+contact: https://hydrostor.ca/contact/
+evidence:
+- url: https://hydrostor.ca/page-sitemap.xml
+  http_status: 200
+  finding: 22 pages; no /pricing, /plans, /signup or /checkout entry.
+- url: https://hydrostor.ca/contact/
+  http_status: 200
+  finding: General enquiry form; the only commercial entry point alongside the vendor interest form.
+- url: https://hydrostor.ca/vendor-interest-form/
+  http_status: 200
+  finding: Supplier and contractor interest form for project construction — procurement, not API sales.

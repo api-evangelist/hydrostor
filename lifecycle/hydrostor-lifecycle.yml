@@ -1,0 +1,55 @@
+generated: '2026-08-22'
+method: probed
+source: https://hydrostor.ca/wp-json/ + hydrostor.ca site probes
+description: >-
+  Versioning, deprecation and operational posture for the WordPress REST content API behind hydrostor.ca.
+  Hydrostor publishes no API lifecycle policy at all; everything here was established by probe on
+  2026-08-22 and the negatives are the substance of the finding.
+versioning:
+  scheme: uri-path namespace
+  current: wp/v2
+  docs: null
+  detail: >-
+    The version is a path namespace inherited from WordPress core, not a Hydrostor contract. 18 namespaces
+    were registered at capture across 340 routes. The set changes whenever the site's WordPress core, the
+    Divi theme or any of its plugins (Yoast SEO Premium, Contact Form 7, Redirection, UserWay, WP Mail SMTP,
+    Two Factor) is upgraded — a consumer gets no announcement and no version pin.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  detail: >-
+    No deprecation policy, no RFC 8594 Sunset or Deprecation header on any response observed. Routes can
+    disappear with a plugin removal. This is the single largest operational risk in consuming this surface.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+  detail: No SLA, uptime target or support commitment is published for this surface, and none is implied — it is a marketing website's CMS API.
+status_page: null
+status_page_detail: >-
+  Probed https://status.hydrostor.ca (no DNS record) and searched hydrostor.ca; no status page exists for
+  the website or for any Hydrostor system. No StatusPage pointer is emitted, because there is nothing to
+  point at.
+changelog: null
+changelog_detail: >-
+  No dated changelog, release notes or API announcements page exists. The newsroom at
+  https://hydrostor.ca/media/ is company news (172 posts, most recent 2026-08-12) and carries nothing about
+  the website interface. No ChangeLog pointer is emitted.
+maturity:
+  stage: incidental
+  detail: >-
+    This is not a productised API. It is the read side of a content management system, exposed by default
+    by WordPress, that happens to be a genuinely useful machine-readable view of Hydrostor's project
+    portfolio, newsroom and media library. It should be consumed as such: stable enough to poll politely,
+    with no contract behind it.
+observed:
+- url: https://hydrostor.ca/wp-json/
+  http_status: 200
+  finding: 340 routes across 18 namespaces; no version, deprecation or sunset metadata in the document.
+- url: https://status.hydrostor.ca
+  http_status: 0
+  finding: No DNS record.
+- url: https://hydrostor.ca/wp-json/wp/v2/posts?per_page=1
+  http_status: 200
+  finding: No Sunset, Deprecation or Warning header on the response.

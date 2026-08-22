@@ -1,0 +1,223 @@
+generated: '2026-08-22'
+method: derived
+source: mcp/hydrostor-mcp.yml + openapi/
+description: 'Binding between the CANDIDATE MCP tool list in mcp/hydrostor-mcp.yml and the OpenAPI operations
+  derived from the live hydrostor.ca surface. Hydrostor ships no MCP server and no GraphQL endpoint, so there
+  is no vendor tool list to reconcile: this crosswalk records that the candidate tool set is a complete, lossless
+  1:1 projection of the REST surface, with no MCP-only composites and no REST operations left unbound. It is included
+  so that anyone standing a server up over this API starts from a tool set whose inputSchema comes from a real
+  operation rather than a guess.'
+surfaces:
+  openapi:
+    files:
+    - hydrostor-discovery-api-openapi.yml
+    - hydrostor-media-api-openapi.yml
+    - hydrostor-oembed-api-openapi.yml
+    - hydrostor-pages-api-openapi.yml
+    - hydrostor-posts-api-openapi.yml
+    - hydrostor-projects-api-openapi.yml
+    - hydrostor-search-api-openapi.yml
+    - hydrostor-seo-api-openapi.yml
+    - hydrostor-taxonomy-api-openapi.yml
+    operations: 26
+    note: Derived by API Evangelist from the site's own route index and OPTIONS documents; Hydrostor publishes
+      no spec.
+  graphql:
+    endpoint: null
+    note: Probed https://hydrostor.ca/graphql — 404. No GraphQL surface.
+  mcp:
+    url: null
+    status: candidate
+    note: No server exists. mcp.hydrostor.ca does not resolve; /.well-known/mcp returns 404; no first-party package
+      on npm or PyPI.
+coverage:
+  tools_named: 26
+  tools_bound: 26
+  mcp_only: 0
+  rest_operations_total: 26
+  rest_operations_with_tool: 26
+crosswalk:
+- tool: get_api_index
+  category: discovery
+  rest:
+  - getApiIndex
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: list_content_types
+  category: discovery
+  rest:
+  - listContentTypes
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: get_content_type
+  category: discovery
+  rest:
+  - getContentType
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: list_taxonomy_definitions
+  category: discovery
+  rest:
+  - listTaxonomyDefinitions
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: list_post_statuses
+  category: discovery
+  rest:
+  - listPostStatuses
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: list_authors
+  category: discovery
+  rest:
+  - listAuthors
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: get_author
+  category: discovery
+  rest:
+  - getAuthor
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: list_media
+  category: media
+  rest:
+  - listMedia
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: get_media_item
+  category: media
+  rest:
+  - getMediaItem
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: get_oembed
+  category: oembed
+  rest:
+  - getOembed
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: list_pages
+  category: pages
+  rest:
+  - listPages
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: get_page
+  category: pages
+  rest:
+  - getPage
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: list_posts
+  category: posts
+  rest:
+  - listPosts
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: get_post
+  category: posts
+  rest:
+  - getPost
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: list_projects
+  category: projects
+  rest:
+  - listProjects
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: get_project
+  category: projects
+  rest:
+  - getProject
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: search
+  category: search
+  rest:
+  - search
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: get_seo_head
+  category: seo
+  rest:
+  - getSeoHead
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: list_category_terms
+  category: taxonomy
+  rest:
+  - listCategoryTerms
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: get_category_term
+  category: taxonomy
+  rest:
+  - getCategoryTerm
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: list_tag_terms
+  category: taxonomy
+  rest:
+  - listTagTerms
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: get_tag_term
+  category: taxonomy
+  rest:
+  - getTagTerm
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: list_project_category_terms
+  category: taxonomy
+  rest:
+  - listProjectCategoryTerms
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: get_project_category_term
+  category: taxonomy
+  rest:
+  - getProjectCategoryTerm
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: list_project_tag_terms
+  category: taxonomy
+  rest:
+  - listProjectTagTerms
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+- tool: get_project_tag_term
+  category: taxonomy
+  rest:
+  - getProjectTagTerm
+  binding: rest
+  confidence: high
+  note: 1:1 — the candidate tool was derived from this operation, so it inherits its parameters verbatim.
+mcp_only: []
+rest_only: []

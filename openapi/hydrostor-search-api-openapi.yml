@@ -1,0 +1,207 @@
+openapi: 3.1.0
+info:
+  title: Hydrostor Search API
+  version: wp/v2
+  description: Public, unauthenticated cross-content search over hydrostor.ca — newsroom posts, static pages and
+    the A-CAES project portfolio in one result set, each result carrying its id, title, canonical URL, type and
+    subtype. Verified live at 200 searchable objects on 2026-08-22. This is the single most useful entry point for
+    an agent that does not already know the content model.
+  contact:
+    name: Hydrostor
+    url: https://hydrostor.ca/contact/
+  x-derived-from: https://hydrostor.ca/wp-json/ route index + per-route HTTP OPTIONS schema documents
+  x-derived-on: '2026-08-22'
+  x-api-evangelist-note: Third-party profile by API Evangelist. Hydrostor publishes no developer program; this document
+    describes the anonymously readable WordPress REST content API served from hydrostor.ca, which the site exposes
+    as a self-describing route index. Every path, parameter and schema here was read from the server's own route
+    index and HTTP OPTIONS documents on 2026-08-22 — nothing is invented.
+servers:
+- url: https://hydrostor.ca/wp-json
+  description: Hydrostor WordPress REST API
+tags:
+- name: Search
+  description: Cross-content search.
+paths:
+  /wp/v2/search:
+    get:
+      operationId: search
+      summary: Search all published content
+      description: Cross-content search over hydrostor.ca — newsroom posts, static pages and A-CAES project records
+        — returning lightweight id / title / url / type / subtype records. Verified live at 200 searchable objects
+        on 2026-08-22.
+      tags:
+      - Search
+      parameters:
+      - name: context
+        in: query
+        description: Scope under which the request is made; determines fields present in response.
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          default: view
+      - name: exclude
+        in: query
+        description: Ensure result set excludes specific IDs.
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+      - name: include
+        in: query
+        description: Limit result set to specific IDs.
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+      - name: page
+        in: query
+        description: Current page of the collection.
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+      - name: per_page
+        in: query
+        description: Maximum number of items to be returned in result set.
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+      - name: search
+        in: query
+        description: Limit results to those matching a string.
+        schema:
+          type: string
+      - name: subtype
+        in: query
+        description: Limit results to items of one or more object subtypes.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - post
+            - page
+            - project
+            - category
+            - post_tag
+            - project_category
+            - project_tag
+            - any
+          default: any
+      - name: type
+        in: query
+        description: Limit results to items of an object type.
+        schema:
+          type: string
+          enum:
+          - post
+          - term
+          - post-format
+          default: post
+      responses:
+        '200':
+          description: A page of search results.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SearchResult'
+          headers:
+            X-WP-Total:
+              description: Total number of items in the collection.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages available at the requested page size.
+              schema:
+                type: integer
+            Link:
+              description: RFC 8288 pagination links (`rel="next"` / `rel="prev"`).
+              schema:
+                type: string
+        '400':
+          description: Invalid request parameter (`rest_invalid_param`).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    SearchResult:
+      type: object
+      title: SearchResult
+      properties:
+        id:
+          type:
+          - integer
+          - string
+          description: Unique identifier for the object.
+          readOnly: true
+        title:
+          type: string
+          description: The title for the object.
+          readOnly: true
+        url:
+          type: string
+          description: URL to the object.
+          format: uri
+          readOnly: true
+        type:
+          type: string
+          description: Object type.
+          enum:
+          - post
+          - term
+          - post-format
+          readOnly: true
+        subtype:
+          type: string
+          description: Object subtype.
+          enum:
+          - post
+          - page
+          - project
+          - category
+          - post_tag
+          - project_category
+          - project_tag
+          readOnly: true
+    Error:
+      type: object
+      title: WordPress REST error
+      description: The error envelope returned by every route on this surface. Observed live on 2026-08-22; it is
+        a WordPress-native envelope, not RFC 9457 problem+json.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. `rest_post_invalid_id`, `rest_invalid_param`, `rest_forbidden`.
+        message:
+          type: string
+          description: Human-readable error message.
+        data:
+          type: object
+          description: Error detail.
+          properties:
+            status:
+              type: integer
+              description: HTTP status code, repeated inside the body.
+            params:
+              type: object
+              description: Per-parameter validation messages, present on `rest_invalid_param`.
+            details:
+              type: object
+              description: Per-parameter structured validation detail, present on `rest_invalid_param`.
+  securitySchemes:
+    applicationPassword:
+      type: http
+      scheme: basic
+      description: WordPress application passwords. Issued from https://hydrostor.ca/wp-admin/authorize-application.php
+        and advertised by the API's own root document under `authentication.application-passwords`. Required only
+        for write and administrative routes; every read operation described in this document answers anonymously.

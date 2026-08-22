@@ -1,0 +1,197 @@
+generated: '2026-08-22'
+method: probed
+source: live requests against https://hydrostor.ca/wp-json/ on 2026-08-22
+description: >-
+  Real request/response pairs captured live against the Hydrostor content API. Every payload below was
+  returned by the server; nothing is synthesised. Responses are shown projected with _fields to keep them
+  readable — the unprojected records also carry the full rendered HTML body, _links and meta.
+examples:
+- name: List the A-CAES project portfolio
+  operation: openapi/hydrostor-projects-api-openapi.yml#listProjects
+  request:
+    method: GET
+    url: https://hydrostor.ca/wp-json/wp/v2/project?per_page=6&_fields=id,slug,title,link,date,modified,status
+  response:
+    http_status: 200
+    headers:
+      x-wp-total: '6'
+      x-wp-totalpages: '6'
+    body:
+    - id: 12763
+      date: '2026-03-11T16:45:55'
+      modified: '2026-08-06T14:52:56'
+      slug: copper-valley-energy-storage-center
+      status: publish
+      link: https://hydrostor.ca/project/copper-valley-energy-storage-center/
+      title: {rendered: Copper Valley Energy Storage Center}
+    - id: 12474
+      date: '2026-02-04T17:01:33'
+      modified: '2026-04-10T15:07:25'
+      slug: wellington-energy-storage-center
+      status: publish
+      link: https://hydrostor.ca/project/wellington-energy-storage-center/
+      title: {rendered: Wellington Energy Storage Center}
+    - id: 10832
+      date: '2025-11-18T09:27:56'
+      modified: '2026-03-18T17:43:05'
+      slug: willow-rock-energy-storage-center
+      status: publish
+      link: https://hydrostor.ca/project/willow-rock-energy-storage-center/
+      title: {rendered: Willow Rock Energy Storage Center}
+    - id: 10829
+      date: '2025-11-18T09:27:12'
+      modified: '2026-07-22T13:16:51'
+      slug: quinte-storage-centre
+      status: publish
+      link: https://hydrostor.ca/project/quinte-storage-centre/
+      title: {rendered: Quinte Energy Storage Centre}
+    - id: 10827
+      date: '2025-11-18T09:26:53'
+      modified: '2026-03-13T17:41:47'
+      slug: silver-city-energy-storage-center
+      status: publish
+      link: https://hydrostor.ca/project/silver-city-energy-storage-center/
+      title: {rendered: Silver City Energy Storage Centre}
+    - id: 10825
+      date: '2025-11-18T09:26:13'
+      modified: '2026-02-17T19:47:02'
+      slug: the-goderich-a-caes-facility
+      status: publish
+      link: https://hydrostor.ca/project/the-goderich-a-caes-facility/
+      title: {rendered: Goderich Energy Storage Centre}
+- name: Get one project by id
+  operation: openapi/hydrostor-projects-api-openapi.yml#getProject
+  request:
+    method: GET
+    url: https://hydrostor.ca/wp-json/wp/v2/project/10825?_fields=id,slug,title,excerpt,link,featured_media,project_category,project_tag
+  response:
+    http_status: 200
+    body:
+      id: 10825
+      slug: the-goderich-a-caes-facility
+      link: https://hydrostor.ca/project/the-goderich-a-caes-facility/
+      title: {rendered: Goderich Energy Storage Centre}
+      excerpt:
+        rendered: >-
+          <p>The Goderich Energy Storage Centre, located in Ontario, Canada is the world’s first
+          commercially contracted Advanced Compressed Air Energy Storage facility and is a significant
+          achievement, conforming to all interconnection, uptime, performance and dispatch requirements.
+          [&hellip;]</p>
+        protected: false
+      featured_media: 0
+      project_category: []
+      project_tag: []
+  note: project_category and project_tag are empty on every project — the taxonomies are registered but carry no terms.
+- name: Cross-content search
+  operation: openapi/hydrostor-search-api-openapi.yml#search
+  request:
+    method: GET
+    url: https://hydrostor.ca/wp-json/wp/v2/search?search=goderich&per_page=2
+  response:
+    http_status: 200
+    body:
+    - id: 10825
+      title: Goderich Energy Storage Centre
+      url: https://hydrostor.ca/project/the-goderich-a-caes-facility/
+      type: post
+      subtype: project
+    - id: 2335
+      title: How an old Goderich salt mine could one day save you money on your hydro bill
+      url: https://hydrostor.ca/how-an-old-goderich-salt-mine-could-one-day-save-you-money-on-your-hydro-bill/
+      type: post
+      subtype: post
+  note: >-
+    subtype is the discriminator that turns an integer id into a resolvable resource. This is the correct
+    first call for an agent that does not know the content model.
+- name: Latest newsroom post
+  operation: openapi/hydrostor-posts-api-openapi.yml#listPosts
+  request:
+    method: GET
+    url: https://hydrostor.ca/wp-json/wp/v2/posts?per_page=1&_fields=id,date,slug,link,title,categories,author,featured_media
+  response:
+    http_status: 200
+    headers:
+      x-wp-total: '172'
+      x-wp-totalpages: '172'
+    body:
+    - id: 13872
+      date: '2026-08-12T08:00:55'
+      slug: hydrostor-secures-230-million-to-progress-advanced-compressed-air-energy-storage-projects
+      link: https://hydrostor.ca/hydrostor-secures-230-million-to-progress-advanced-compressed-air-energy-storage-projects/
+      title: {rendered: Hydrostor Secures $230 Million to Progress Advanced Compressed Air Energy Storage Projects}
+      author: 7
+      featured_media: 9463
+      categories: [9]
+  note: 'categories: [9] is Press Release. Filter the archive with ?categories=9 (54 posts), 8 (Featured Coverage, 96) or 34 (Insights, 24).'
+- name: Newsroom category vocabulary
+  operation: openapi/hydrostor-taxonomy-api-openapi.yml#listCategoryTerms
+  request:
+    method: GET
+    url: https://hydrostor.ca/wp-json/wp/v2/categories?per_page=100&_fields=id,name,slug,count
+  response:
+    http_status: 200
+    body:
+    - {id: 8, name: Featured Coverage, slug: featured-coverage, count: 96}
+    - {id: 34, name: Insights, slug: insights, count: 24}
+    - {id: 9, name: Press Release, slug: press-release, count: 54}
+    - {id: 1, name: Uncategorized, slug: uncategorized, count: 0}
+- name: Media library item
+  operation: openapi/hydrostor-media-api-openapi.yml#listMedia
+  request:
+    method: GET
+    url: https://hydrostor.ca/wp-json/wp/v2/media?per_page=1&_fields=id,date,slug,title,media_type,mime_type,source_url
+  response:
+    http_status: 200
+    headers:
+      x-wp-total: '736'
+    body:
+    - id: 13810
+      date: '2026-07-08T16:00:35'
+      slug: willow-rock-vendor-interest
+      title: {rendered: Willow Rock Vendor Interest}
+      media_type: image
+      mime_type: image/png
+      source_url: https://hydrostor.ca/wp-content/uploads/2026/07/Willow-Rock-Vendor-Interest-scaled.png
+- name: oEmbed a hydrostor.ca URL
+  operation: openapi/hydrostor-oembed-api-openapi.yml#getOembed
+  request:
+    method: GET
+    url: https://hydrostor.ca/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhydrostor.ca%2Ftechnology%2F
+  response:
+    http_status: 200
+    body:
+      version: '1.0'
+      provider_name: Hydrostor
+      provider_url: https://hydrostor.ca
+      author_name: Hydrostor Admin
+      author_url: https://hydrostor.ca/author/hydrostor-admin/
+      title: Technology
+      type: rich
+      width: 600
+      height: 338
+- name: Error — parameter out of bounds
+  operation: openapi/hydrostor-posts-api-openapi.yml#listPosts
+  request:
+    method: GET
+    url: https://hydrostor.ca/wp-json/wp/v2/posts?per_page=999
+  response:
+    http_status: 400
+    body:
+      code: rest_invalid_param
+      message: 'Invalid parameter(s): per_page'
+      data:
+        status: 400
+        params: {per_page: per_page must be between 1 (inclusive) and 100 (inclusive)}
+        details:
+          per_page: {code: rest_out_of_bounds, message: per_page must be between 1 (inclusive) and 100 (inclusive), data: null}
+- name: Error — anonymous write rejected
+  request:
+    method: POST
+    url: https://hydrostor.ca/wp-json/wp/v2/posts
+  response:
+    http_status: 401
+    body:
+      code: rest_cannot_create
+      message: Sorry, you are not allowed to create posts as this user.
+      data: {status: 401}
+  note: This is the probe that establishes the surface is read-only in practice for any public consumer.

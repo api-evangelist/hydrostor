@@ -1,0 +1,124 @@
+generated: '2026-08-22'
+method: probed
+source: live responses from https://hydrostor.ca/wp-json/ + per-route OPTIONS documents + openapi/ derived parameters
+description: >-
+  Cross-cutting request/response semantics for the WordPress REST content API behind hydrostor.ca.
+  Hydrostor publishes no API documentation of any kind, so every convention below was read off live
+  responses and the server's own route index and OPTIONS schema documents on 2026-08-22, or is the
+  documented WordPress core behaviour this surface inherits.
+authentication:
+  style: none for reads
+  detail: >-
+    Anonymous read. No key, token, account or signup. The root document advertises exactly one scheme —
+    WordPress application passwords (HTTP Basic over TLS), issued only from
+    https://hydrostor.ca/wp-admin/authorize-application.php, which has no public issuance path. Writes
+    answer 401 rest_cannot_create without one.
+  artifact: authentication/hydrostor-authentication.yml
+idempotency:
+  supported: false
+  idempotency_key_header: null
+  detail: >-
+    There is no idempotency contract. No Idempotency-Key header, parameter or replay window is accepted
+    or documented anywhere on this surface. Every publicly reachable operation is a GET and is therefore
+    idempotent by HTTP method semantics alone, which is not the same thing as an idempotency guarantee
+    for retried writes. Recorded as an honest absence, not an unchecked field.
+pagination:
+  style: page-number with offset alternative
+  params:
+    page: 1-based page number. Default 1.
+    per_page: Records per page. Default 10, minimum 1, maximum 100 — exceeding it returns 400 rest_invalid_param with a per-parameter detail block.
+    offset: Alternative to page; skip N records.
+    order: asc or desc.
+    orderby: Sort field; varies per resource (date, id, title, slug, relevance, modified, include...).
+  response_headers:
+    X-WP-Total: Total records matching the query.
+    X-WP-TotalPages: Total pages available at the current per_page.
+    Link: RFC 8288 rel="next" / rel="prev" links.
+  detail: >-
+    Verified live on 2026-08-22: GET /wp/v2/posts?per_page=1 returned X-WP-Total 172, X-WP-TotalPages 172
+    and a Link header carrying rel="next". Both counter headers are named in
+    Access-Control-Expose-Headers, so they are readable from a browser.
+  cursor: false
+field_selection:
+  supported: true
+  params:
+    _fields: Comma-separated allowlist of top-level response fields — a real sparse-fieldset control.
+    _embed: Inline embeddable linked resources (author, featured media, terms) under _embedded.
+    _links: HAL-style link relations are present on every record by default, including targetHints.allow.
+  detail: >-
+    _fields is the single most valuable parameter on this surface for an agent: an unfiltered project or
+    post record carries the full rendered HTML body, while the same record projected to id, slug, title,
+    link and dates is a few hundred bytes.
+filtering:
+  detail: >-
+    Per-resource query parameters are declared in the OPTIONS document for each route and carried into the
+    derived OpenAPI. Common across post types: search, slug, include, exclude, after, before,
+    modified_after, modified_before, status, order, orderby, offset.
+  taxonomy_filters:
+  - 'GET /wp/v2/posts?categories=<id>  (4 categories exist: Featured Coverage 8, Insights 34, Press Release 9, Uncategorized 1)'
+  - 'GET /wp/v2/project?project_category=<id>  (accepted by the route, but the taxonomy carries 0 terms so it filters nothing today)'
+context_parameter:
+  param: context
+  values: [view, embed, edit]
+  default: view
+  detail: >-
+    `view` is the full public record, `embed` a trimmed subset for embedding. `edit` requires
+    authentication and answers 401 anonymously. Field visibility per context is declared in each property
+    of the published schemas.
+request_tracing:
+  request_id_header: x-gateway-request-id
+  detail: >-
+    Responses carry x-gateway-request-id, x-gateway-cache-key and x-gateway-cache-status (HIT/MISS) from
+    the WordPress host's edge, plus a Cloudflare cf-ray. These are infrastructure identifiers, not an
+    application correlation contract — Hydrostor publishes no API support channel to quote them to.
+versioning:
+  scheme: uri-path namespace
+  current: wp/v2
+  detail: >-
+    The version is a namespace segment in the path. 18 namespaces were registered at capture (wp/v2,
+    oembed/1.0, yoast/v1, contact-form-7/v1, redirection/v1, wpaas/v1, wp-abilities/v1, divi/v1,
+    two-factor, ...) across 340 routes. Hydrostor publishes no versioning or deprecation policy of its
+    own; the namespace set moves when the site's WordPress core, theme and plugins are upgraded, with no
+    announcement and no changelog.
+  artifact: lifecycle/hydrostor-lifecycle.yml
+error_envelope:
+  format: wp-rest-error
+  rfc9457: false
+  shape: '{ "code": "<machine_code>", "message": "<human message>", "data": { "status": <http_status>, "params": {...}, "details": {...} } }'
+  detail: >-
+    Consistent across every route observed. It is a stable, machine-readable envelope but it is not
+    application/problem+json — content-type is application/json and there is no type URI, so an RFC 9457
+    client gets no problem type to branch on.
+  artifact: errors/hydrostor-problem-types.yml
+rate_limit_signal:
+  supported: false
+  detail: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header was returned on any request in this pass, and no
+    429 was observed. Any limit that exists is enforced silently at the WordPress host or at Cloudflare.
+  artifact: rate-limits/hydrostor-rate-limits.yml
+caching:
+  detail: >-
+    Responses are edge-cached: x-gateway-cache-status returned HIT on a repeated /wp/v2/posts request and
+    cf-cache-status returned DYNAMIC at Cloudflare. No ETag or Last-Modified was returned on the JSON
+    collection responses observed, so conditional requests are not available to a polling agent.
+cors:
+  detail: >-
+    access-control-allow-headers and access-control-expose-headers are returned (exposing X-WP-Total,
+    X-WP-TotalPages and Link), and Vary includes Origin.
+robots:
+  detail: 'Every /wp-json/ response carries x-robots-tag: noindex — machine-readable, deliberately not indexed.'
+reversibility:
+  applicable: false
+  grade: na
+  detail: >-
+    The public surface is read-only. Every operation reachable without credentials is a GET, so there is
+    no write to reverse and no window to state. The write methods declared on these same routes require a
+    WordPress application password with no public issuance path, which puts them outside the public
+    contract entirely. reversibility, dry_run_mode and idempotency are all `na` here for the same reason —
+    an honest not-applicable, not a zero.
+  write_surfaces: []
+  reversal_operations: []
+dry_run_mode:
+  supported: false
+  applicable: false
+  detail: No preview, validate-only or dry-run parameter exists; there is no write surface to rehearse.

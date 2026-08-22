@@ -1,0 +1,27 @@
+generated: '2026-08-22'
+method: derived
+source: openapi/hydrostor-discovery-api-openapi.yml, openapi/hydrostor-media-api-openapi.yml,
+  openapi/hydrostor-oembed-api-openapi.yml, openapi/hydrostor-pages-api-openapi.yml, openapi/hydrostor-posts-api-openapi.yml,
+  openapi/hydrostor-projects-api-openapi.yml, openapi/hydrostor-search-api-openapi.yml, openapi/hydrostor-seo-api-openapi.yml,
+  openapi/hydrostor-taxonomy-api-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: applicationPassword
+  type: http
+  scheme: basic
+  description: WordPress application passwords. Issued from https://hydrostor.ca/wp-admin/authorize-application.php
+    and advertised by the API's own root document under `authentication.application-passwords`.
+    Required only for write and administrative routes; every read operation described in this
+    document answers anonymously.
+  sources:
+  - openapi/hydrostor-discovery-api-openapi.yml
+  - openapi/hydrostor-media-api-openapi.yml
+  - openapi/hydrostor-oembed-api-openapi.yml
+  - openapi/hydrostor-pages-api-openapi.yml
+  - openapi/hydrostor-posts-api-openapi.yml
+  - openapi/hydrostor-projects-api-openapi.yml
+  - openapi/hydrostor-search-api-openapi.yml
+  - openapi/hydrostor-seo-api-openapi.yml
+  - openapi/hydrostor-taxonomy-api-openapi.yml

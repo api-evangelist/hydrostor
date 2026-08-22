@@ -1,0 +1,46 @@
+generated: '2026-08-22'
+method: searched
+source: npm, PyPI, RubyGems, crates.io, Packagist, NuGet, pkg.go.dev/proxy.golang.org, GitHub — searched 2026-08-22
+package_count: 0
+official_package_count: 0
+note: >-
+  Hydrostor publishes no client libraries, SDKs or CLI in any public package registry, and has no GitHub
+  organization. This is expected: it is an energy infrastructure developer with no developer program and no
+  product API to wrap. The content API profiled in this repo is stock WordPress and is consumed with any
+  HTTP client — the generic third-party WordPress clients on npm and PyPI are not Hydrostor packages and
+  are deliberately NOT listed here, because listing them would credit Hydrostor with an SDK it did not
+  publish. package_count is 0 as a recorded fact, not an unchecked field. No `SDKs` pointer is emitted in
+  apis.yml for the same reason.
+packages: []
+evidence:
+- registry: npm
+  query: hydrostor
+  url: https://registry.npmjs.org/-/v1/search?text=hydrostor
+  http_status: 200
+  results: 0
+- registry: pypi
+  url: https://pypi.org/pypi/hydrostor/json
+  http_status: 404
+- registry: rubygems
+  url: https://rubygems.org/api/v1/gems/hydrostor.json
+  http_status: 404
+- registry: packagist
+  url: https://repo.packagist.org/packages/hydrostor/hydrostor.json
+  http_status: 404
+- registry: nuget
+  url: https://api.nuget.org/v3/registration5-semver1/hydrostor/index.json
+  http_status: 404
+- registry: go
+  url: https://proxy.golang.org/github.com/hydrostor/@v/list
+  http_status: 404
+- registry: crates.io
+  url: https://crates.io/api/v1/crates/hydrostor
+  http_status: 403
+  finding: crates.io rejected the unauthenticated user agent; treated as unverified rather than as a hit. No Rust client is referenced anywhere on hydrostor.ca.
+- registry: github
+  url: https://api.github.com/orgs/hydrostor
+  http_status: 404
+  finding: >-
+    No GitHub organization. A user search for "hydrostor" returns only unrelated accounts
+    (HydroStorm-cloud, HydrostorHMN, hydrostorm, HydroStormEquipment) and a repository search for
+    Hydrostor energy storage returns 0 results.

@@ -1,0 +1,102 @@
+openapi: 3.1.0
+info:
+  title: Hydrostor SEO Metadata API
+  version: wp/v2
+  description: Public Yoast SEO head endpoint returning the rendered head metadata and its parsed schema.org JSON-LD
+    graph for any hydrostor.ca URL — a structured-data view of every newsroom post, page and A-CAES project without
+    scraping HTML. Anonymous and read-only.
+  contact:
+    name: Hydrostor
+    url: https://hydrostor.ca/contact/
+  x-derived-from: https://hydrostor.ca/wp-json/ route index + per-route HTTP OPTIONS schema documents
+  x-derived-on: '2026-08-22'
+  x-api-evangelist-note: Third-party profile by API Evangelist. Hydrostor publishes no developer program; this document
+    describes the anonymously readable WordPress REST content API served from hydrostor.ca, which the site exposes
+    as a self-describing route index. Every path, parameter and schema here was read from the server's own route
+    index and HTTP OPTIONS documents on 2026-08-22 — nothing is invented.
+servers:
+- url: https://hydrostor.ca/wp-json
+  description: Hydrostor WordPress REST API
+tags:
+- name: SEO
+  description: Rendered head metadata and schema.org JSON-LD.
+paths:
+  /yoast/v1/get_head:
+    get:
+      operationId: getSeoHead
+      summary: Get rendered SEO head metadata and JSON-LD for a URL
+      description: Returns the rendered `<head>` metadata for any hydrostor.ca URL together with its parsed schema.org
+        JSON-LD graph — a structured-data view of any page without scraping the HTML. Served by Yoast SEO Premium
+        28.2. Verified live on 2026-08-22.
+      tags:
+      - SEO
+      parameters:
+      - name: url
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The rendered head metadata and its parsed JSON-LD graph.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeoHead'
+        '400':
+          description: Invalid request parameter (`rest_invalid_param`).
+          content:
+            application/json:
+              schema: &id001
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The URL is not a resource on this site.
+          content:
+            application/json:
+              schema: *id001
+components:
+  schemas:
+    SeoHead:
+      type: object
+      title: SeoHead
+      description: Rendered head metadata for one URL, as returned live by hydrostor.ca on 2026-08-22.
+      properties:
+        html:
+          type: string
+          description: The rendered `<head>` markup — title, meta description, canonical, robots, Open Graph, Twitter
+            card and the embedded `application/ld+json` schema.org graph.
+        json:
+          type: object
+          description: The same head metadata parsed into an object, including the schema.org `@graph` when present.
+    Error:
+      type: object
+      title: WordPress REST error
+      description: The error envelope returned by every route on this surface. Observed live on 2026-08-22; it is
+        a WordPress-native envelope, not RFC 9457 problem+json.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. `rest_post_invalid_id`, `rest_invalid_param`, `rest_forbidden`.
+        message:
+          type: string
+          description: Human-readable error message.
+        data:
+          type: object
+          description: Error detail.
+          properties:
+            status:
+              type: integer
+              description: HTTP status code, repeated inside the body.
+            params:
+              type: object
+              description: Per-parameter validation messages, present on `rest_invalid_param`.
+            details:
+              type: object
+              description: Per-parameter structured validation detail, present on `rest_invalid_param`.
+  securitySchemes:
+    applicationPassword:
+      type: http
+      scheme: basic
+      description: WordPress application passwords. Issued from https://hydrostor.ca/wp-admin/authorize-application.php
+        and advertised by the API's own root document under `authentication.application-passwords`. Required only
+        for write and administrative routes; every read operation described in this document answers anonymously.

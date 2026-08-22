@@ -1,0 +1,88 @@
+generated: '2026-08-22'
+method: probed
+source: live error responses from https://hydrostor.ca/wp-json/ + 4xx responses declared in openapi/
+format: wp-rest-error
+rfc9457: false
+envelope:
+  content_type: application/json
+  shape: '{ "code": "<machine_code>", "message": "<human message>", "data": { "status": <http_status> } }'
+  detail: >-
+    Stable and machine-readable, but not RFC 9457 problem+json — there is no `type` URI to branch on, no
+    `title`/`detail` split, and no registry of codes published anywhere. The `code` string is the only
+    reliable discriminator, and it is a WordPress core constant rather than a Hydrostor contract, so it
+    can change under a core upgrade without notice. Hydrostor publishes no error reference; every entry
+    below was observed live on 2026-08-22 or is declared in the derived OpenAPI documents.
+problems:
+- code: rest_post_invalid_id
+  status: 404
+  title: Invalid post ID
+  message: Invalid post ID.
+  meaning: No post, page or project exists with the requested numeric identifier, or it is not published.
+  remediation: Resolve the identifier from a collection or search response before requesting the item.
+  observed: true
+  evidence:
+    url: https://hydrostor.ca/wp-json/wp/v2/posts/99999999
+    http_status: 404
+    body: '{"code":"rest_post_invalid_id","message":"Invalid post ID.","data":{"status":404}}'
+  source_operation: openapi/hydrostor-posts-api-openapi.yml#getPost
+- code: rest_invalid_param
+  status: 400
+  title: Invalid parameter
+  message: 'Invalid parameter(s): <name>'
+  meaning: >-
+    One or more query parameters failed schema validation. This is the richest error on the surface — it
+    carries data.params (a per-parameter message map) and data.details (a per-parameter structured object
+    with its own nested code, e.g. rest_out_of_bounds).
+  remediation: Read data.details.<param>.message; the bounds and enums are declared in the OPTIONS schema for the route and in the derived OpenAPI parameters.
+  observed: true
+  evidence:
+    url: https://hydrostor.ca/wp-json/wp/v2/posts?per_page=999
+    http_status: 400
+    body: '{"code":"rest_invalid_param","message":"Invalid parameter(s): per_page","data":{"status":400,"params":{"per_page":"per_page must be between 1 (inclusive) and 100 (inclusive)"},"details":{"per_page":{"code":"rest_out_of_bounds","message":"per_page must be between 1 (inclusive) and 100 (inclusive)","data":null}}}}'
+  source_operation: openapi/hydrostor-posts-api-openapi.yml#listPosts
+- code: rest_forbidden
+  status: 401
+  title: Not allowed
+  message: Sorry, you are not allowed to do that.
+  meaning: The route or the requested context requires authentication. Returned for administrative reads such as /wp/v2/settings and for context=edit.
+  remediation: >-
+    Not remediable by a public consumer — a WordPress application password is required and Hydrostor
+    publishes no issuance path. Stay on context=view.
+  observed: true
+  evidence:
+    url: https://hydrostor.ca/wp-json/wp/v2/settings
+    http_status: 401
+    body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+- code: rest_cannot_create
+  status: 401
+  title: Cannot create
+  message: Sorry, you are not allowed to create posts as this user.
+  meaning: A write method was attempted anonymously. Every POST/PUT/PATCH/DELETE on this surface answers this way without credentials.
+  remediation: None available publicly. This is the boundary that makes the surface read-only in practice.
+  observed: true
+  evidence:
+    url: https://hydrostor.ca/wp-json/wp/v2/posts
+    http_status: 401
+    method: POST
+    body: '{"code":"rest_cannot_create","message":"Sorry, you are not allowed to create posts as this user.","data":{"status":401}}'
+- code: rest_term_invalid
+  status: 404
+  title: Invalid term ID
+  message: Term does not exist.
+  meaning: No taxonomy term exists with the requested identifier.
+  remediation: List the taxonomy first; note that three of the four taxonomies on this site carry zero terms.
+  observed: false
+  note: Declared in the derived taxonomy OpenAPI; not exercised live because the project taxonomies are empty.
+  source_operation: openapi/hydrostor-taxonomy-api-openapi.yml#getProjectCategoryTerm
+- code: rest_no_route
+  status: 404
+  title: No route
+  message: 'No route was found matching the URL and request method.'
+  meaning: The path is not a registered route in any namespace.
+  remediation: Read the route index at https://hydrostor.ca/wp-json/ — it enumerates all 340 registered routes.
+  observed: false
+  note: WordPress core behaviour inherited by this surface; not exercised in this pass.
+gaps:
+- No error reference, error code registry or troubleshooting page is published anywhere on hydrostor.ca.
+- Errors are not application/problem+json, so there is no type URI for a client to key on.
+- No support channel exists for the API; the only contact route is the general company form at https://hydrostor.ca/contact/.

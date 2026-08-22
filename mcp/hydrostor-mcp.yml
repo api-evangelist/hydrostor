@@ -1,0 +1,106 @@
+generated: '2026-08-22'
+method: derived
+status: candidate
+source: openapi/ (26 operations across 9 derived specs)
+description: Hydrostor operates no MCP server. Searched hydrostor.ca, the npm registry, the PyPI index and the
+  public MCP registries on 2026-08-22 and found none; mcp.hydrostor.ca does not resolve in DNS and https://hydrostor.ca/.well-known/mcp
+  returns 404. The tool list below is a CANDIDATE derived one-to-one from the OpenAPI operations this repo derived
+  from the live surface — it is what an MCP server over this surface would expose, not something Hydrostor publishes.
+  Every tool is read-only because the whole anonymous surface is read-only.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: none
+  verified: probed
+  note: 'mode: none — nobody ships a server. Probed https://hydrostor.ca/.well-known/mcp (404), mcp.hydrostor.ca
+    (no DNS record) and searched npm and PyPI for a first-party package (no results). No endpoint is invented
+    here.'
+server:
+  name: hydrostor
+  transport: http
+  url: null
+  published: false
+auth:
+  required: false
+  note: All listed candidate tools work anonymously over plain HTTPS.
+tools:
+- name: get_api_index
+  description: Get the API root index
+  source_operation: openapi/hydrostor-discovery-api-openapi.yml#getApiIndex
+- name: list_content_types
+  description: List registered content types
+  source_operation: openapi/hydrostor-discovery-api-openapi.yml#listContentTypes
+- name: get_content_type
+  description: Get one content type
+  source_operation: openapi/hydrostor-discovery-api-openapi.yml#getContentType
+- name: list_taxonomy_definitions
+  description: List registered taxonomies
+  source_operation: openapi/hydrostor-discovery-api-openapi.yml#listTaxonomyDefinitions
+- name: list_post_statuses
+  description: List publication statuses
+  source_operation: openapi/hydrostor-discovery-api-openapi.yml#listPostStatuses
+- name: list_authors
+  description: List public authors
+  source_operation: openapi/hydrostor-discovery-api-openapi.yml#listAuthors
+- name: get_author
+  description: Get one public author
+  source_operation: openapi/hydrostor-discovery-api-openapi.yml#getAuthor
+- name: list_media
+  description: List media attachments
+  source_operation: openapi/hydrostor-media-api-openapi.yml#listMedia
+- name: get_media_item
+  description: Get one media attachment
+  source_operation: openapi/hydrostor-media-api-openapi.yml#getMediaItem
+- name: get_oembed
+  description: Get oEmbed rich metadata for a hydrostor.ca URL
+  source_operation: openapi/hydrostor-oembed-api-openapi.yml#getOembed
+- name: list_pages
+  description: List site pages
+  source_operation: openapi/hydrostor-pages-api-openapi.yml#listPages
+- name: get_page
+  description: Get one site page
+  source_operation: openapi/hydrostor-pages-api-openapi.yml#getPage
+- name: list_posts
+  description: List newsroom posts
+  source_operation: openapi/hydrostor-posts-api-openapi.yml#listPosts
+- name: get_post
+  description: Get one newsroom post
+  source_operation: openapi/hydrostor-posts-api-openapi.yml#getPost
+- name: list_projects
+  description: List A-CAES projects
+  source_operation: openapi/hydrostor-projects-api-openapi.yml#listProjects
+- name: get_project
+  description: Get one A-CAES project
+  source_operation: openapi/hydrostor-projects-api-openapi.yml#getProject
+- name: search
+  description: Search all published content
+  source_operation: openapi/hydrostor-search-api-openapi.yml#search
+- name: get_seo_head
+  description: Get rendered SEO head metadata and JSON-LD for a URL
+  source_operation: openapi/hydrostor-seo-api-openapi.yml#getSeoHead
+- name: list_category_terms
+  description: List newsroom categories
+  source_operation: openapi/hydrostor-taxonomy-api-openapi.yml#listCategoryTerms
+- name: get_category_term
+  description: Get one term from newsroom categories
+  source_operation: openapi/hydrostor-taxonomy-api-openapi.yml#getCategoryTerm
+- name: list_tag_terms
+  description: List newsroom tags
+  source_operation: openapi/hydrostor-taxonomy-api-openapi.yml#listTagTerms
+- name: get_tag_term
+  description: Get one term from newsroom tags
+  source_operation: openapi/hydrostor-taxonomy-api-openapi.yml#getTagTerm
+- name: list_project_category_terms
+  description: List project categories
+  source_operation: openapi/hydrostor-taxonomy-api-openapi.yml#listProjectCategoryTerms
+- name: get_project_category_term
+  description: Get one term from project categories
+  source_operation: openapi/hydrostor-taxonomy-api-openapi.yml#getProjectCategoryTerm
+- name: list_project_tag_terms
+  description: List project tags
+  source_operation: openapi/hydrostor-taxonomy-api-openapi.yml#listProjectTagTerms
+- name: get_project_tag_term
+  description: Get one term from project tags
+  source_operation: openapi/hydrostor-taxonomy-api-openapi.yml#getProjectTagTerm

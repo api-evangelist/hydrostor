@@ -1,0 +1,54 @@
+generated: '2026-08-22'
+method: probed
+source: probes against https://hydrostor.ca on 2026-08-22
+description: >-
+  /.well-known/ discovery probe for the only host Hydrostor serves an API from. Every path returned 404.
+  This file records the absence; NO WellKnown, APICatalog or SecurityTxt pointer is emitted in apis.yml,
+  because there is no document to point at.
+hit_count: 0
+hosts:
+- host: https://hydrostor.ca
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/mcp
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /.well-known/dnt-policy.txt
+    status: 404
+    file: null
+soft_404_control:
+  url: https://hydrostor.ca/.well-known/zzz-control-probe-9182
+  status: 404
+  bytes: 83612
+  finding: >-
+    The control probe returns the same 404 status and the same 83,612-byte WordPress "Page not found"
+    template as every real /.well-known/ path, which confirms these are genuine 404s and not an SPA
+    catch-all answering 200. https://hydrostor.ca/security.txt (the non-well-known location) also 404s
+    with the identical body.
+notes:
+- Only one host is in scope — hydrostor.ca. No api., docs., developer., portal., app., data., status. or mcp. subdomain resolves in DNS.
+- robots.txt (200) and sitemap.xml (200) are served and were used for discovery, but neither is a /.well-known/ document.
+- The site's own machine-readable discovery surface is the WordPress route index at https://hydrostor.ca/wp-json/, not /.well-known/.

@@ -1,0 +1,45 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Hydrostor Taxonomy API
+  version: 1.0.0
+extends: openapi/hydrostor-taxonomy-api-openapi.yml
+x-generated: '2026-08-22'
+x-method: generated
+x-note: Hydrostor publishes no OpenAPI. The document this overlay extends was derived by API Evangelist from the
+  server's own route index and HTTP OPTIONS schema documents on 2026-08-22. These actions record the enhancements
+  API Evangelist added on top of that derivation — provenance, consumption guidance and cross-links to the artifacts
+  in this repo — so the derived spec can be regenerated from the live host without losing them.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-profile: https://github.com/api-evangelist/hydrostor
+    x-apievangelist-derived: route index + HTTP OPTIONS schema documents on https://hydrostor.ca/wp-json/, 2026-08-22
+    x-apievangelist-provider-published-spec: false
+    x-apievangelist-surface: Incidental WordPress REST content API behind an energy infrastructure company's marketing
+      site; not a product API.
+- target: $.info
+  update:
+    x-artifacts:
+      authentication: authentication/hydrostor-authentication.yml
+      errors: errors/hydrostor-problem-types.yml
+      conventions: conventions/hydrostor-conventions.yml
+      lifecycle: lifecycle/hydrostor-lifecycle.yml
+      rate_limits: rate-limits/hydrostor-rate-limits.yml
+      examples: examples/hydrostor-examples.yml
+      data_model: data-model/hydrostor-data-model.yml
+      conformance: conformance/hydrostor-conformance.yml
+- target: $.servers[0]
+  update:
+    x-anonymous-read: true
+    x-write-requires: WordPress application password; no public issuance path.
+    x-rate-limit-signal: none advertised — self-throttle.
+- target: $.paths.*.get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+      token:
+        max-ttl: 3600
+      audit: none
+    x-consumption-note: Send _fields to trim the response; unfiltered post, page and project records carry the
+      full rendered HTML body.

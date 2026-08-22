@@ -1,0 +1,118 @@
+generated: '2026-08-22'
+method: derived
+source: openapi/ ($ref links and id-reference fields) + https://hydrostor.ca/wp-json/wp/v2/types and /taxonomies
+description: >-
+  Entity graph for the WordPress REST content API behind hydrostor.ca, derived from the published resource
+  schemas and the site's own registered type/taxonomy declarations. Identifiers are integers, not prefixed
+  strings — there is no id-prefix scheme to key on, so an id is only meaningful together with its resource.
+identifiers:
+  scheme: opaque positive integers, unique per site (not per type)
+  detail: >-
+    A single integer namespace covers posts, pages, projects and media, so an id alone does not tell you
+    the resource. The search endpoint is the only place that returns id plus type plus subtype together,
+    which makes it the correct entry point for resolving an unknown id.
+entities:
+- name: Project
+  resource: /wp/v2/project
+  description: A Hydrostor Advanced Compressed Air Energy Storage facility record. The one Hydrostor-specific entity on the surface.
+  count_observed: 6
+  key: id
+  relationships:
+  - has_one: MediaItem
+    via: featured_media
+    note: 0 when unset; observed 0 on the Goderich record.
+  - belongs_to: Author
+    via: author
+  - has_many: ProjectCategory
+    via: project_category
+    note: Array of term ids. Observed empty on all 6 projects — the taxonomy is registered but carries no terms.
+  - has_many: ProjectTag
+    via: project_tag
+    note: Array of term ids. Observed empty on all 6 projects.
+- name: Post
+  resource: /wp/v2/posts
+  description: A newsroom entry — press release, insight or featured media coverage.
+  count_observed: 172
+  key: id
+  relationships:
+  - belongs_to: Author
+    via: author
+  - has_one: MediaItem
+    via: featured_media
+  - has_many: Category
+    via: categories
+  - has_many: Tag
+    via: tags
+    note: Array is present on every record but the tag taxonomy carries 0 terms.
+- name: Page
+  resource: /wp/v2/pages
+  description: A static marketing or policy page.
+  count_observed: 22
+  key: id
+  relationships:
+  - belongs_to: Page
+    via: parent
+    note: Self-referential hierarchy; 0 means top level.
+  - belongs_to: Author
+    via: author
+  - has_one: MediaItem
+    via: featured_media
+- name: MediaItem
+  resource: /wp/v2/media
+  description: A media library attachment with its generated size variants.
+  count_observed: 736
+  key: id
+  relationships:
+  - belongs_to: Post
+    via: post
+    note: The record the attachment was uploaded to; may be a Post, Page or Project id.
+  - belongs_to: Author
+    via: author
+- name: Category
+  resource: /wp/v2/categories
+  description: Hierarchical newsroom classification.
+  count_observed: 4
+  key: id
+  terms: [Featured Coverage (8, 96 posts), Press Release (9, 54 posts), Insights (34, 24 posts), Uncategorized (1, 0 posts)]
+  relationships:
+  - belongs_to: Category
+    via: parent
+  - has_many: Post
+    via: 'inverse of Post.categories'
+- name: Tag
+  resource: /wp/v2/tags
+  description: Flat newsroom classification. Registered, readable, and empty.
+  count_observed: 0
+  key: id
+- name: ProjectCategory
+  resource: /wp/v2/project_category
+  description: Hierarchical classification for the project portfolio. Registered, readable, and empty.
+  count_observed: 0
+  key: id
+  relationships:
+  - belongs_to: ProjectCategory
+    via: parent
+- name: ProjectTag
+  resource: /wp/v2/project_tag
+  description: Flat classification for the project portfolio. Registered, readable, and empty.
+  count_observed: 0
+  key: id
+- name: Author
+  resource: /wp/v2/users
+  description: Public author record. Anonymous callers see the view projection only.
+  count_observed: 3
+  key: id
+- name: SearchResult
+  resource: /wp/v2/search
+  description: A lightweight cross-type pointer — id, title, url, type, subtype — resolving to Post, Page or Project.
+  count_observed: 200
+  key: id
+  relationships:
+  - has_one: Post|Page|Project
+    via: '_links.self.href (discriminated by subtype)'
+finding: >-
+  The data model is stock WordPress with one Hydrostor-specific extension: the `project` type and its two
+  taxonomies. The taxonomies are the interesting gap — they are registered against the project portfolio
+  and are fully readable, but carry zero terms, so the six A-CAES projects cannot be filtered by region,
+  market, status or technology through the API even though the marketing site groups them that way. That
+  is a content-modelling gap on Hydrostor's side, not a limitation of the interface.
