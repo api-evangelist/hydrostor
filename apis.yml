@@ -17,6 +17,18 @@ description: >-
   core REST content API behind hydrostor.ca, which is anonymously readable, read-only without credentials,
   and carries the project portfolio, the newsroom archive and the media library. That surface is profiled
   here for discovery purposes and is described from the site's own self-describing route index.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://hydrostor.ca/wp-content/uploads/2026/06/cropped-HDS-Favicon-2026.png
 url: https://raw.githubusercontent.com/api-evangelist/hydrostor/refs/heads/main/apis.yml
 x-type: company
