@@ -61,6 +61,10 @@ apis:
   humanURL: https://hydrostor.ca/projects/
   baseURL: https://hydrostor.ca/wp-json
   tags:
+  - Project
+  - Energy Storage
+  - Content
+  tags_raw:
   - Projects
   - Energy Storage
   - Content
@@ -154,6 +158,10 @@ apis:
   humanURL: https://hydrostor.ca/media-kit/
   baseURL: https://hydrostor.ca/wp-json
   tags:
+  - Media
+  - Image
+  - Content
+  tags_raw:
   - Media
   - Images
   - Content
