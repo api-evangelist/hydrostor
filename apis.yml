@@ -68,8 +68,8 @@ apis:
   name: Hydrostor Projects API
   description: >-
     Public, unauthenticated read access to Hydrostor's Advanced Compressed Air Energy Storage project
-    portfolio — the site-specific `project` custom post type behind hydrostor.ca/projects/. Verified live at
-    6 published projects on 2026-08-22: the Goderich A-CAES Facility, Willow Rock, Silver City, Quinte,
+    portfolio — the site-specific `project` custom post type behind hydrostor.ca/projects/. Verified live
+    at 6 published projects on 2026-08-22: the Goderich A-CAES Facility, Willow Rock, Silver City, Quinte,
     Wellington and Copper Valley Energy Storage Centers. This is the one genuinely Hydrostor-specific
     resource on the surface.
   humanURL: https://hydrostor.ca/projects/
@@ -105,9 +105,9 @@ apis:
   name: Hydrostor Posts API
   description: >-
     Public, unauthenticated read access to the Hydrostor newsroom archive — press releases, company insights
-    and featured media coverage — via the WordPress core REST API behind hydrostor.ca. Verified live at 172
-    published posts on 2026-08-22 across the Featured Coverage (96), Press Release (54) and Insights (24)
-    categories.
+    and featured media coverage — via the WordPress core REST API behind hydrostor.ca. Verified live at
+    172 published posts on 2026-08-22 across the Featured Coverage (96), Press Release (54) and Insights
+    (24) categories.
   humanURL: https://hydrostor.ca/media/
   baseURL: https://hydrostor.ca/wp-json
   tags:
@@ -137,9 +137,9 @@ apis:
   name: Hydrostor Pages API
   description: >-
     Public, unauthenticated read access to the static marketing and policy pages of hydrostor.ca — the
-    company, technology and geology explainers, the project index, use cases, careers, contact, media kit,
-    newsletter signup, Privacy Policy, Terms of Use and the California AB1305 climate disclosure. Verified
-    live at 22 published pages on 2026-08-22.
+    company, technology and geology explainers, the project index, use cases, careers, contact, media
+    kit, newsletter signup, Privacy Policy, Terms of Use and the California AB1305 climate disclosure.
+    Verified live at 22 published pages on 2026-08-22.
   humanURL: https://hydrostor.ca/
   baseURL: https://hydrostor.ca/wp-json
   tags:
@@ -166,9 +166,9 @@ apis:
   name: Hydrostor Media API
   description: >-
     Public, unauthenticated read access to the media library behind hydrostor.ca — project renders, facility
-    and geology photography, technology diagrams and press assets, each with its generated size variants and
-    source URL. Verified live at 736 attachments on 2026-08-22. This is the machine-readable counterpart to
-    the human media kit.
+    and geology photography, technology diagrams and press assets, each with its generated size variants
+    and source URL. Verified live at 736 attachments on 2026-08-22. This is the machine-readable counterpart
+    to the human media kit.
   humanURL: https://hydrostor.ca/media-kit/
   baseURL: https://hydrostor.ca/wp-json
   tags:
@@ -201,8 +201,8 @@ apis:
   description: >-
     Public, unauthenticated read access to the classification vocabularies behind hydrostor.ca: newsroom
     categories and tags, plus the site-specific `project_category` and `project_tag` taxonomies registered
-    against the A-CAES project portfolio. Verified live on 2026-08-22 at 4 newsroom categories and 0 terms in
-    each of the other three.
+    against the A-CAES project portfolio. Verified live on 2026-08-22 at 4 newsroom categories and 0 terms
+    in each of the other three.
   humanURL: https://hydrostor.ca/media/
   baseURL: https://hydrostor.ca/wp-json
   tags:
@@ -228,9 +228,9 @@ apis:
 - aid: hydrostor:hydrostor-search-api
   name: Hydrostor Search API
   description: >-
-    Public, unauthenticated cross-content search over hydrostor.ca — newsroom posts, static pages and the
-    A-CAES project portfolio in one result set, each result carrying its id, title, canonical URL, type and
-    subtype. Verified live at 200 searchable objects on 2026-08-22.
+    Public, unauthenticated cross-content search over hydrostor.ca — newsroom posts, static pages and
+    the A-CAES project portfolio in one result set, each result carrying its id, title, canonical URL,
+    type and subtype. Verified live at 200 searchable objects on 2026-08-22.
   humanURL: https://hydrostor.ca/
   baseURL: https://hydrostor.ca/wp-json
   tags:
@@ -254,10 +254,10 @@ apis:
 - aid: hydrostor:hydrostor-discovery-api
   name: Hydrostor Discovery API
   description: >-
-    Public, unauthenticated discovery metadata for hydrostor.ca — the self-describing route index (340 routes
-    across 18 namespaces at capture), the registered content types and taxonomies, the publication statuses,
-    and the public author records. This is the surface that makes the rest of the API machine-readable in the
-    complete absence of any published documentation.
+    Public, unauthenticated discovery metadata for hydrostor.ca — the self-describing route index (340
+    routes across 18 namespaces at capture), the registered content types and taxonomies, the publication
+    statuses, and the public author records. This is the surface that makes the rest of the API machine-readable
+    in the complete absence of any published documentation.
   humanURL: https://hydrostor.ca/wp-json/
   baseURL: https://hydrostor.ca/wp-json
   tags:
@@ -278,30 +278,6 @@ apis:
     url: conformance/hydrostor-conformance.yml
   - type: Lifecycle
     url: lifecycle/hydrostor-lifecycle.yml
-- aid: hydrostor:hydrostor-oembed-api
-  name: Hydrostor oEmbed API
-  description: >-
-    Public oEmbed 1.0 provider endpoint for hydrostor.ca URLs, returning embeddable rich metadata — title,
-    author, thumbnail and iframe HTML — for any newsroom post, static page or A-CAES project page. Requires
-    no credentials.
-  humanURL: https://hydrostor.ca/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhydrostor.ca%2Ftechnology%2F
-  baseURL: https://hydrostor.ca/wp-json
-  tags:
-  - oEmbed
-  - Metadata
-  properties:
-  - type: OpenAPI
-    url: openapi/hydrostor-oembed-api-openapi.yml
-  - type: Overlay
-    url: overlays/hydrostor-oembed-api-overlay.yaml
-  - type: Authentication
-    url: authentication/hydrostor-authentication.yml
-  - type: ErrorCatalog
-    url: errors/hydrostor-problem-types.yml
-  - type: Conventions
-    url: conventions/hydrostor-conventions.yml
-  - type: Conformance
-    url: conformance/hydrostor-conformance.yml
 - aid: hydrostor:hydrostor-seo-api
   name: Hydrostor SEO Metadata API
   description: >-
@@ -327,12 +303,32 @@ apis:
     url: conventions/hydrostor-conventions.yml
   - type: Conformance
     url: conformance/hydrostor-conformance.yml
+- aid: hydrostor:hydrostor-o-embed-api
+  name: Hydrostor o Embed API
+  description: oEmbed 1.0 provider endpoint.
+  humanURL: https://hydrostor.ca/projects/
+  baseURL: https://hydrostor.ca/wp-json
+  tags:
+  - o Embed
+  properties:
+  - type: OpenAPI
+    url: openapi/hydrostor-o-embed-api-openapi.yml
+  - type: Authentication
+    url: authentication/hydrostor-authentication.yml
+  - type: ErrorCatalog
+    url: errors/hydrostor-problem-types.yml
+  - type: Conventions
+    url: conventions/hydrostor-conventions.yml
+  - type: Conformance
+    url: conformance/hydrostor-conformance.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/hydrostor-oembed-api-overlay.yaml
 - type: DomainSecurity
   url: security/hydrostor-domain-security.yml
 - type: Website
