@@ -309,6 +309,8 @@ apis:
   humanURL: https://hydrostor.ca/projects/
   baseURL: https://hydrostor.ca/wp-json
   tags:
+  - oEmbed
+  tags_raw:
   - o Embed
   properties:
   - type: OpenAPI
