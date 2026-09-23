@@ -1,20 +1,14 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Hydrostor Posts API
   version: wp/v2
-  description: Public, unauthenticated read access to the Hydrostor newsroom archive — press releases, company insights
-    and featured media coverage — via the WordPress core REST API behind hydrostor.ca. Verified live at 172 published
-    posts on 2026-08-22. The same collection is syndicated as RSS at https://hydrostor.ca/feed/, but only this surface
-    exposes the full archive with filtering, pagination and taxonomy joins.
+  description: Public, unauthenticated read access to the Hydrostor newsroom archive — press releases, company insights and featured media coverage — via the WordPress core REST API behind hydrostor.ca. Verified live at 172 published posts on 2026-08-22. The same collection is syndicated as RSS at https://hydrostor.ca/feed/, but only this surface exposes the full archive with filtering, pagination and taxonomy joins.
   contact:
     name: Hydrostor
     url: https://hydrostor.ca/contact/
   x-derived-from: https://hydrostor.ca/wp-json/ route index + per-route HTTP OPTIONS schema documents
   x-derived-on: '2026-08-22'
-  x-api-evangelist-note: Third-party profile by API Evangelist. Hydrostor publishes no developer program; this document
-    describes the anonymously readable WordPress REST content API served from hydrostor.ca, which the site exposes
-    as a self-describing route index. Every path, parameter and schema here was read from the server's own route
-    index and HTTP OPTIONS documents on 2026-08-22 — nothing is invented.
+  x-api-evangelist-note: Third-party profile by API Evangelist. Hydrostor publishes no developer program; this document describes the anonymously readable WordPress REST content API served from hydrostor.ca, which the site exposes as a self-describing route index. Every path, parameter and schema here was read from the server's own route index and HTTP OPTIONS documents on 2026-08-22 — nothing is invented.
 servers:
 - url: https://hydrostor.ca/wp-json
   description: Hydrostor WordPress REST API
@@ -26,8 +20,7 @@ paths:
     get:
       operationId: listPosts
       summary: List newsroom posts
-      description: Retrieve a paginated collection of published newsroom entries. Verified live at 172 posts on
-        2026-08-22, classified across the Featured Coverage (96), Press Release (54) and Insights (24) categories.
+      description: Retrieve a paginated collection of published newsroom entries. Verified live at 172 posts on 2026-08-22, classified across the Featured Coverage (96), Press Release (54) and Insights (24) categories.
       tags:
       - Posts
       parameters:
@@ -269,7 +262,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: &id001
+                items:
                   $ref: '#/components/schemas/Post'
           headers:
             X-WP-Total:
@@ -288,7 +281,7 @@ paths:
           description: Invalid request parameter (`rest_invalid_param`).
           content:
             application/json:
-              schema: &id002
+              schema:
                 $ref: '#/components/schemas/Error'
   /wp/v2/posts/{id}:
     get:
@@ -324,17 +317,20 @@ paths:
           description: The newsroom post.
           content:
             application/json:
-              schema: *id001
+              schema:
+                $ref: '#/components/schemas/Post'
         '400':
           description: Invalid request parameter (`rest_invalid_param`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: No post exists with that identifier (`rest_post_invalid_id`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     Post:
@@ -539,8 +535,7 @@ components:
     Error:
       type: object
       title: WordPress REST error
-      description: The error envelope returned by every route on this surface. Observed live on 2026-08-22; it is
-        a WordPress-native envelope, not RFC 9457 problem+json.
+      description: The error envelope returned by every route on this surface. Observed live on 2026-08-22; it is a WordPress-native envelope, not RFC 9457 problem+json.
       properties:
         code:
           type: string
@@ -565,6 +560,4 @@ components:
     applicationPassword:
       type: http
       scheme: basic
-      description: WordPress application passwords. Issued from https://hydrostor.ca/wp-admin/authorize-application.php
-        and advertised by the API's own root document under `authentication.application-passwords`. Required only
-        for write and administrative routes; every read operation described in this document answers anonymously.
+      description: WordPress application passwords. Issued from https://hydrostor.ca/wp-admin/authorize-application.php and advertised by the API's own root document under `authentication.application-passwords`. Required only for write and administrative routes; every read operation described in this document answers anonymously.

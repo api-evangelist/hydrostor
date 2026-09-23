@@ -1,21 +1,14 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Hydrostor Taxonomy API
   version: wp/v2
-  description: 'Public, unauthenticated read access to the classification vocabularies behind hydrostor.ca: newsroom
-    categories and tags, plus the site-specific `project_category` and `project_tag` taxonomies registered against
-    the A-CAES project portfolio. Verified live on 2026-08-22 at 4 newsroom categories and 0 terms in each of the
-    other three — the project taxonomies are registered and readable but carry no terms, so project records cannot
-    currently be filtered by classification.'
+  description: 'Public, unauthenticated read access to the classification vocabularies behind hydrostor.ca: newsroom categories and tags, plus the site-specific `project_category` and `project_tag` taxonomies registered against the A-CAES project portfolio. Verified live on 2026-08-22 at 4 newsroom categories and 0 terms in each of the other three — the project taxonomies are registered and readable but carry no terms, so project records cannot currently be filtered by classification.'
   contact:
     name: Hydrostor
     url: https://hydrostor.ca/contact/
   x-derived-from: https://hydrostor.ca/wp-json/ route index + per-route HTTP OPTIONS schema documents
   x-derived-on: '2026-08-22'
-  x-api-evangelist-note: Third-party profile by API Evangelist. Hydrostor publishes no developer program; this document
-    describes the anonymously readable WordPress REST content API served from hydrostor.ca, which the site exposes
-    as a self-describing route index. Every path, parameter and schema here was read from the server's own route
-    index and HTTP OPTIONS documents on 2026-08-22 — nothing is invented.
+  x-api-evangelist-note: Third-party profile by API Evangelist. Hydrostor publishes no developer program; this document describes the anonymously readable WordPress REST content API served from hydrostor.ca, which the site exposes as a self-describing route index. Every path, parameter and schema here was read from the server's own route index and HTTP OPTIONS documents on 2026-08-22 — nothing is invented.
 servers:
 - url: https://hydrostor.ca/wp-json
   description: Hydrostor WordPress REST API
@@ -27,8 +20,7 @@ paths:
     get:
       operationId: listCategoryTerms
       summary: List newsroom categories
-      description: 'Retrieve the newsroom category vocabulary. Verified live at 4 categories on 2026-08-22: Featured
-        Coverage (96 posts), Press Release (54), Insights (24) and Uncategorized (0).'
+      description: 'Retrieve the newsroom category vocabulary. Verified live at 4 categories on 2026-08-22: Featured Coverage (96 posts), Press Release (54), Insights (24) and Uncategorized (0).'
       tags:
       - Taxonomy
       parameters:
@@ -132,7 +124,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: &id001
+                items:
                   $ref: '#/components/schemas/Category'
           headers:
             X-WP-Total:
@@ -151,7 +143,7 @@ paths:
           description: Invalid request parameter (`rest_invalid_param`).
           content:
             application/json:
-              schema: &id002
+              schema:
                 $ref: '#/components/schemas/Error'
   /wp/v2/categories/{id}:
     get:
@@ -182,23 +174,25 @@ paths:
           description: The term.
           content:
             application/json:
-              schema: *id001
+              schema:
+                $ref: '#/components/schemas/Category'
         '400':
           description: Invalid request parameter (`rest_invalid_param`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: No term exists with that identifier (`rest_term_invalid`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
   /wp/v2/tags:
     get:
       operationId: listTagTerms
       summary: List newsroom tags
-      description: Retrieve the newsroom tag vocabulary. Verified live at 0 terms on 2026-08-22 — the taxonomy is
-        registered and readable but Hydrostor does not tag its newsroom.
+      description: Retrieve the newsroom tag vocabulary. Verified live at 0 terms on 2026-08-22 — the taxonomy is registered and readable but Hydrostor does not tag its newsroom.
       tags:
       - Taxonomy
       parameters:
@@ -302,7 +296,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: &id003
+                items:
                   $ref: '#/components/schemas/Tag'
           headers:
             X-WP-Total:
@@ -321,7 +315,8 @@ paths:
           description: Invalid request parameter (`rest_invalid_param`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
   /wp/v2/tags/{id}:
     get:
       operationId: getTagTerm
@@ -351,23 +346,25 @@ paths:
           description: The term.
           content:
             application/json:
-              schema: *id003
+              schema:
+                $ref: '#/components/schemas/Tag'
         '400':
           description: Invalid request parameter (`rest_invalid_param`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: No term exists with that identifier (`rest_term_invalid`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
   /wp/v2/project_category:
     get:
       operationId: listProjectCategoryTerms
       summary: List project categories
-      description: Retrieve the hierarchical project category vocabulary attached to the `project` custom post type.
-        Verified live at 0 terms on 2026-08-22 — registered but unused.
+      description: Retrieve the hierarchical project category vocabulary attached to the `project` custom post type. Verified live at 0 terms on 2026-08-22 — registered but unused.
       tags:
       - Taxonomy
       parameters:
@@ -471,7 +468,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: &id004
+                items:
                   $ref: '#/components/schemas/ProjectCategory'
           headers:
             X-WP-Total:
@@ -490,7 +487,8 @@ paths:
           description: Invalid request parameter (`rest_invalid_param`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
   /wp/v2/project_category/{id}:
     get:
       operationId: getProjectCategoryTerm
@@ -520,23 +518,25 @@ paths:
           description: The term.
           content:
             application/json:
-              schema: *id004
+              schema:
+                $ref: '#/components/schemas/ProjectCategory'
         '400':
           description: Invalid request parameter (`rest_invalid_param`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: No term exists with that identifier (`rest_term_invalid`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
   /wp/v2/project_tag:
     get:
       operationId: listProjectTagTerms
       summary: List project tags
-      description: Retrieve the flat project tag vocabulary attached to the `project` custom post type. Verified
-        live at 0 terms on 2026-08-22 — registered but unused.
+      description: Retrieve the flat project tag vocabulary attached to the `project` custom post type. Verified live at 0 terms on 2026-08-22 — registered but unused.
       tags:
       - Taxonomy
       parameters:
@@ -640,7 +640,7 @@ paths:
             application/json:
               schema:
                 type: array
-                items: &id005
+                items:
                   $ref: '#/components/schemas/ProjectTag'
           headers:
             X-WP-Total:
@@ -659,7 +659,8 @@ paths:
           description: Invalid request parameter (`rest_invalid_param`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
   /wp/v2/project_tag/{id}:
     get:
       operationId: getProjectTagTerm
@@ -689,95 +690,22 @@ paths:
           description: The term.
           content:
             application/json:
-              schema: *id005
+              schema:
+                $ref: '#/components/schemas/ProjectTag'
         '400':
           description: Invalid request parameter (`rest_invalid_param`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: No term exists with that identifier (`rest_term_invalid`).
           content:
             application/json:
-              schema: *id002
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Category:
-      type: object
-      title: Category
-      properties:
-        id:
-          type: integer
-          description: Unique identifier for the term.
-          readOnly: true
-        count:
-          type: integer
-          description: Number of published posts for the term.
-          readOnly: true
-        description:
-          type: string
-          description: HTML description of the term.
-        link:
-          type: string
-          description: URL of the term.
-          format: uri
-          readOnly: true
-        name:
-          type: string
-          description: HTML title for the term.
-        slug:
-          type: string
-          description: An alphanumeric identifier for the term unique to its type.
-        taxonomy:
-          type: string
-          description: Type attribution for the term.
-          enum:
-          - category
-          readOnly: true
-        parent:
-          type: integer
-          description: The parent term ID.
-        meta:
-          type: object
-          description: Meta fields.
-        acf:
-          type: object
-          description: ACF field data
-    Tag:
-      type: object
-      title: Tag
-      properties:
-        id:
-          type: integer
-          description: Unique identifier for the term.
-          readOnly: true
-        count:
-          type: integer
-          description: Number of published posts for the term.
-          readOnly: true
-        description:
-          type: string
-          description: HTML description of the term.
-        link:
-          type: string
-          description: URL of the term.
-          format: uri
-          readOnly: true
-        name:
-          type: string
-          description: HTML title for the term.
-        slug:
-          type: string
-          description: An alphanumeric identifier for the term unique to its type.
-        taxonomy:
-          type: string
-          description: Type attribution for the term.
-          enum:
-          - post_tag
-          readOnly: true
-        meta:
-          type: object
-          description: Meta fields.
     ProjectCategory:
       type: object
       title: ProjectCategory
@@ -809,6 +737,47 @@ components:
           description: Type attribution for the term.
           enum:
           - project_category
+          readOnly: true
+        parent:
+          type: integer
+          description: The parent term ID.
+        meta:
+          type: object
+          description: Meta fields.
+        acf:
+          type: object
+          description: ACF field data
+    Category:
+      type: object
+      title: Category
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the term.
+          readOnly: true
+        count:
+          type: integer
+          description: Number of published posts for the term.
+          readOnly: true
+        description:
+          type: string
+          description: HTML description of the term.
+        link:
+          type: string
+          description: URL of the term.
+          format: uri
+          readOnly: true
+        name:
+          type: string
+          description: HTML title for the term.
+        slug:
+          type: string
+          description: An alphanumeric identifier for the term unique to its type.
+        taxonomy:
+          type: string
+          description: Type attribution for the term.
+          enum:
+          - category
           readOnly: true
         parent:
           type: integer
@@ -857,11 +826,45 @@ components:
         acf:
           type: object
           description: ACF field data
+    Tag:
+      type: object
+      title: Tag
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the term.
+          readOnly: true
+        count:
+          type: integer
+          description: Number of published posts for the term.
+          readOnly: true
+        description:
+          type: string
+          description: HTML description of the term.
+        link:
+          type: string
+          description: URL of the term.
+          format: uri
+          readOnly: true
+        name:
+          type: string
+          description: HTML title for the term.
+        slug:
+          type: string
+          description: An alphanumeric identifier for the term unique to its type.
+        taxonomy:
+          type: string
+          description: Type attribution for the term.
+          enum:
+          - post_tag
+          readOnly: true
+        meta:
+          type: object
+          description: Meta fields.
     Error:
       type: object
       title: WordPress REST error
-      description: The error envelope returned by every route on this surface. Observed live on 2026-08-22; it is
-        a WordPress-native envelope, not RFC 9457 problem+json.
+      description: The error envelope returned by every route on this surface. Observed live on 2026-08-22; it is a WordPress-native envelope, not RFC 9457 problem+json.
       properties:
         code:
           type: string
@@ -886,6 +889,4 @@ components:
     applicationPassword:
       type: http
       scheme: basic
-      description: WordPress application passwords. Issued from https://hydrostor.ca/wp-admin/authorize-application.php
-        and advertised by the API's own root document under `authentication.application-passwords`. Required only
-        for write and administrative routes; every read operation described in this document answers anonymously.
+      description: WordPress application passwords. Issued from https://hydrostor.ca/wp-admin/authorize-application.php and advertised by the API's own root document under `authentication.application-passwords`. Required only for write and administrative routes; every read operation described in this document answers anonymously.
